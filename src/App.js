@@ -1,25 +1,52 @@
-import logo from './logo.svg';
+import { React, useEffect, useState, useCallback } from 'react';
 import './App.css';
+import ListItem from './components/ListItem';
+import { SelectedBox } from './components/SelectedBox';
+import SearchInput from './components/SearchInput';
+import { debouncedFetchData } from './helpers/debounce';
 
-function App() {
+export default function App() {
+  const [queryString, setQueryString] = useState('');
+  const [results, setResults] = useState([]);
+  const [isOpen, setIsOpen] = useState(false)
+  const [selected, setSelected] = useState({})
+
+  const onChangeHandler = (e) => {
+    setQueryString(e.target.value)
+  }
+
+  const fetchData = useCallback(async () => {
+    debouncedFetchData(queryString, res => {
+      setResults(res);
+    });
+  }, [queryString])
+
+  useEffect(() => {
+    fetchData();
+  }, [queryString, fetchData]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <SearchInput
+        value={queryString}
+        onChangeHandler={onChangeHandler}
+      />
+      {results.map((result, index) => (
+        <div key={index}>
+          <ListItem
+            title={result.name}
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+            setSelected={setSelected}
+            {...result}
+          />
+        </div>
+      ))}
+      {isOpen && selected ?
+        <SelectedBox
+          {...selected}
+        />
+        : null}
     </div>
   );
 }
-
-export default App;
