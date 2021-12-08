@@ -15,7 +15,7 @@ export default function App() {
     setQueryString(e.target.value)
   }
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(() => {
     debouncedFetchData(queryString, res => {
       setResults(res);
     });

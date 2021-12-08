@@ -6,6 +6,10 @@ export const debouncedFetchData = debounce((query, callBack) => {
 }, 500);
 
 const fetchData = async (query, callBack) => {
-    const response = await fetchSearchResults(query);
-    callBack(response);
+    try {
+        const response = await fetchSearchResults(query);
+        callBack(response);
+    } catch (error) {
+        console.log(error)
+    }
 };

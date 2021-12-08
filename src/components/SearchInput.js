@@ -1,9 +1,9 @@
-import { React, useState, useEffect } from 'react';
+import { React } from 'react';
 import './SearchInput.css';
 
 const SearchInput = ({ value, onChangeHandler }) => {
     return (
-        <div class="search-container">
+        <div className="search-container">
             <input
                 type="text"
                 value={value}

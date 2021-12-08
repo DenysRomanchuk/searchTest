@@ -6,7 +6,7 @@ const ListItem = ({ title, isOpen, setIsOpen, setSelected, ...res }) => {
         setIsOpen(!isOpen)
     }
     return (
-        <div class="list-item-container">
+        <div className="list-item-container">
             <div className="center"
                 onClick={() => handleClick({ ...res })}>
                 <h4>{title}</h4>
