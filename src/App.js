@@ -10,13 +10,25 @@ export default function App() {
   const [results, setResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState({})
+  const [isNoResult, setIsNoResult] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const onChangeHandler = (e) => {
     setQueryString(e.target.value)
   }
 
+  useEffect(() => { 
+    if (queryString.length > 1 && !results.length && !isLoading) {
+      setIsNoResult(true)
+    } else { 
+      setIsNoResult(false)
+    }
+  }, [results, queryString, isLoading])
+
   const fetchData = useCallback(() => {
+    setIsLoading(true)
     debouncedFetchData(queryString, res => {
+      setIsLoading(false)
       setResults(res);
     });
   }, [queryString])
@@ -42,11 +54,19 @@ export default function App() {
           />
         </div>
       ))}
+
+      {
+        isNoResult && !isLoading ?
+          <div>No Result </div>
+          : null
+      }
+
       {isOpen && selected ?
         <SelectedBox
           {...selected}
         />
         : null}
+        
     </div>
   );
 }
